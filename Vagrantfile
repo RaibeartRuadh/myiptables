@@ -35,7 +35,6 @@ MACHINES = {
   },
 }
 
-
 Vagrant.configure("2") do |config|
   MACHINES.each do |boxname, boxconfig|
     config.vm.define boxname do |box|
@@ -50,25 +49,25 @@ Vagrant.configure("2") do |config|
         box.vm.provision "shell", path: "config/sshconfig.sh"
         case boxname.to_s
         when "inetRouter"
-          #box.vm.provision "ansible" do |ansible|
-          #ansible.playbook = "playbook/inetrouterplay.yml"
-          #end
           box.vm.provision :file do |file|
-          file.source      = './iptables'
-          file.destination = '/home/vagrant/iptables'
+            file.source      = 'config/iptables'
+            file.destination = '/home/vagrant/iptables'
           end          
-          
-          
           box.vm.provision "shell", run: "always", path: "config/inetrouter.sh"
-
-            
+ 
         when "centralRouter"
+          box.vm.provision :file do |file|
+            file.source      = 'config/test.sh'
+            file.destination = '/home/vagrant/test.sh'
+            end             
           box.vm.provision "shell", run: "always", path: "config/centralrouter.sh"
         when "inetRouter2"
           box.vm.network "forwarded_port", guest: 8080, host: 8080
           box.vm.provision "shell", run: "always", path: "config/inetrouter2.sh"
         when "centralServer"
-          box.vm.provision "shell", run: "always", path: "config/centralserver.sh"
+           box.vm.provision "shell", run: "always", path: "config/centralserver.sh"
+          
+          
         end
       end
   end
