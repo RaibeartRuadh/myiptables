@@ -1,0 +1,15 @@
+---
+
+- hosts: inetRouter
+  become: true
+  tasks:
+
+  - name: копируем iptables
+    copy:
+      src: iptables
+      dest: /home/vagrant/iptables
+      owner: vagrant
+      group: vagrant
+      mode: 0777
+
+
